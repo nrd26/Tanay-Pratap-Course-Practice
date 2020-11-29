@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Personal Expense</title>
+    <meta content='width=device-width, initial-scale=1' name='viewport'>
+    <!--<link rel="stylesheet" type="text/css" media="screen" href="main.css" />-->
+    <style>
+        body{
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+        }
+    </style>
+    
+</head>
+<body>
+    <h1>The total expense is</h1>
+    <h1 id="headingTotal"></h1>
+    <input type="text" id="inputAmount" />
+    <button id="btnAddExpense">+</button>
+
+    <script>
+        //get the heading element
+        const headingEl = document.querySelector("#headingTotal");
+        //init value of expense
+        let totalExpense = 0;
+        //set heading element to total expense
+        headingEl.textContent = totalExpense;
+        //onButtonClick add inputAmount to totalExpense
+        function addExpenseToTotal() {
+            //read value from inputAmount
+            const inputElement = document.querySelector("#inputAmount").value;
+            //console.log({ inputElement });
+            //convert to number in base 10
+            const expense = parseInt(inputElement, 10);
+            //console.log({ expense });
+            //add value to totalExpense
+            totalExpense += expense;
+            //console.log({ totalExpense });
+            //set heading element to total expense
+            headingEl.textContent = totalExpense;
+        }
+        // Get the button element
+        const element = document.querySelector("#btnAddExpense");
+
+        //Listen for the event
+        element.addEventListener("click", addExpenseToTotal, false)
+        
+
+        
+
+        //initialise a variable to 0
+        //let counter = 0;
+        //function to increment the no.
+        //function counterIncrement() {
+        //    //increment counter for every click
+        //    counter++;
+        //    //Show on the chrome console
+        //    console.log(counter);
+        //}
+    </script>
+</body>
+</html>
