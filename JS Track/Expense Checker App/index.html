@@ -4,96 +4,204 @@
     <meta charset="utf-8" />
     <title>Personal Expense</title>
     <meta content='width=device-width, initial-scale=1' name='viewport'>
-    <!--<link rel="stylesheet" type="text/css" media="screen" href="main.css" />-->
-    <style>
-        body{
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            align-items:center;
-            height:100vh;
-        }
-    </style>
-    
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+          crossorigin="anonymous">
+    <script defer
+            src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"
+            integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP"
+            crossorigin="anonymous"></script>
+
 </head>
 <body>
-    <!--<h1>The total expense is</h1>-->
-    <h1 id="headingTotal"></h1>
-    <input type="text" id="inputAmount" />
-    <input id="inputDesc" type="text" />
-    <button id="btnAddExpense">+</button>
-    <div id="expenseTable"></div>
+    <nav class="navbar navbar-dark bg-dark">
+        <span class="navbar-brand mb-0 h1">Xpense</span>
+        <span class="navbar-brand mb-0 h1" id="headingTotal"></span>
+    </nav>
+    <div class="container-fluid bg-light" style="min-height: 100vh">
+        <div class="container">
+            <div class="jumbotron mt-4">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="inputAmount" placeholder="Amount spent" aria-label="Amount spent"
+                           aria-describedby="spent in rupee" />
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="spent in rupee">₹</span>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="spent at">@</span>
+                    </div>
+                    <input type="text" class="form-control" id="inputDesc" placeholder="spent On" aria-label="spent On"
+                           aria-describedby="spent at" />
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" id="btnAddExpense" type="button" id="button-addon2">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <ul class="list-group" id="expenseTable"></ul>
+            </div>
+        </div>
+    </div>
 
-    <script>
-        //get the heading element
-        const headingEl = document.querySelector("#headingTotal");
-        //init value of expense
-        let totalExpense = 0;
-        //set heading element to show no expenses so far
-        const noExpense = `No Expenses Yet!`
-        headingEl.textContent = noExpense;
-        //initialise array to store data on expenses
-        const allExpenses = [];
 
-        //onButtonClick add inputAmount to totalExpense
-        function addExpenseToTotal() {
-            const expenseItem = {};
-            //read value from inputAmount
-            const inputElement = document.querySelector("#inputAmount").value;
-            //console.log({ inputElement });
+
+        <script>
+            //get the heading element
+            const headingEl = document.querySelector("#headingTotal");
+            //get the description element
+            const inputDescEl = document.querySelector("#inputDesc");
+            //get inputAmount element
+            const inputElement = document.querySelector("#inputAmount")
             //Get the table element
             const expenseTableEl = document.querySelector("#expenseTable");
-            //get the description element value
-            const inputDescEl = document.querySelector("#inputDesc").value;
-            //convert to number in base 10
-            const expense = parseInt(inputElement, 10);
-            //console.log({ expense });
-            //add input expense and desc to the expenseItem object for temporary storage within the function
-            expenseItem.desc = inputDescEl;
-            expenseItem.amount = expense;
-            //push the input amount and desc to the list of allExpenses 
-            allExpenses.push(expenseItem);
-            //console.clear();
-            //console.table(allExpenses);
-            //add value to totalExpense
-            totalExpense += expense;
-            //console.log({ totalExpense });
-            //Make a sentence to show as O/P
-            const someText = `Total : ${totalExpense}`
-            //set heading element to total expense
-            headingEl.textContent = someText;
+            //init value of expense
+            let totalExpense = 0;
+            //set heading element to show no expenses so far
+            const noExpense = `₹0`
+            headingEl.textContent = noExpense;
+            //initialise array to store data on expenses
+            let allExpenses = [];
 
-            /*Using map and lambda function, go through each element(expense) of allExpenses and 
-             return the HTML element div displaying details of each expense*/
-            const allExpenseHTML = allExpenses.map(expense => {
-                return `<div> ${expense.amount} :: ${expense.desc} </div>`
+            //onButtonClick add inputAmount to totalExpense
+            function addExpenseToTotal() {
+                const expenseItem = {};
+                //read value from inputAmount
+                const textAmount = inputElement.value;
+                //console.log({ inputElement });
+                //get the description element value
+                const textDesc = inputDescEl.value;
+                //convert to number in base 10
+                const expense = parseInt(textAmount, 10);
+                if (textDesc !== "" && !isNaN(expense) && expense > 0) {
+                    //add input expense and desc and date to the expenseItem object for temporary storage within the function
+                    expenseItem.desc = textDesc;
+                    expenseItem.amount = expense;
+                     //Accessing builtin function in JS to get current date
+                    expenseItem.moment = new Date();
+                    //add value to totalExpense
+                    totalExpense += expense;
+                    //clear screen
+                    updateTotal();
+                     //push the input amount and desc to the list of allExpenses
+                    allExpenses.push(expenseItem);
+
+                    renderList(allExpenses);
+                    //Reset
+                    inputElement.value = "";
+                    inputDescEl.value = "";
+                }
+            }
+
+            // Get the button element
+            const element = document.querySelector("#btnAddExpense");
+
+            //Listen for the event
+            element.addEventListener("click", addExpenseToTotal, false);
+
+            document.addEventListener("keypress", function (event) {
+                if (event.keyCode === 13 || event.which === 13) {
+                    addExpenseToTotal();
+                }
             });
-            /* Join all the elements with a space in between(In page it appears on next line 
-            because we put flex - direction: column for each element) */
-            joinedAllExpenseHTML = allExpenseHTML.join("");
 
-            //change the HTML of expenseTable to display the new details
-            expenseTableEl.innerHTML = joinedAllExpenseHTML;
-        }
+            //Function to get Date as string
+            function getDateString(momento) {
+                return momento.toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                });
+            }
 
-        // Get the button element
-        const element = document.querySelector("#btnAddExpense");
+            function updateTotal() {
+                let someText = `Total : ₹${totalExpense}`;
+                headingEl.textContent = someText;
+            }
 
-        //Listen for the event
-        element.addEventListener("click", addExpenseToTotal, false);
-        
+            /*fn to delete list items by recognizing something unique among them which is their time stamp. 
+             Note that although on the website only date is given, when you're creating expenseItem.moment = new Date; in line 89,
+             all the details including exact time are given. You will notice that in the above function, getDateString
+             we remove all the unecessary stuff and put only the date,year and month*/
+            function deleteItem(dateValue,amount) {
+                /*If the date of the item to be deleted is 
+                 not equal to the current item in allExpenses(These are items which we dont 
+                 want to delete because we havent pressed the delete button for them) then return 
+                 that item to the new array to be sent 
+                 to renderList*/
+                //                        |
+                //                        v
+                //const Arr = allExpenses.filter(expense => {
+                //    if (expense.moment.valueOf() !== dateValue) {
+                //        return expense;
+                //    }
+                //})
+                 //                        | In shorter format
+                //                         v
+                const newArr = allExpenses.filter(
+                    expense => expense.moment.valueOf() !== dateValue
+                );
+                renderList(newArr);
+                totalExpense -= amount;
+                updateTotal();
+                
+            }
 
-        
+            //Function to create new list elements
+            function renderList(arrOfList) {
+                /*Using map and lambda function, go through each element(expense) of allExpenses and
+                return the HTML element displaying details of each expense which is done through createList Item function*/
+                const allExpensesHTML = arrOfList.map(expense =>
+                    createListItem(expense)
+                );
+                /* Join all the elements with a space in between(In page it appears on next line
+                because we put flex - direction: column for each element) */
+                const joinedAllExpenseHTML = allExpensesHTML.join("");
+                //change the HTML of expenseTable to display the new details
+                expenseTableEl.innerHTML = joinedAllExpenseHTML;
+                allExpenses = arrOfList;
+            }
+            
+            //View Layer
+            /*Function to return list item. In parameters part, expense object 
+             which is passed to this fn when called is destructured(desc and amount parameters are extracted by putting {})*/
+            function createListItem({ desc, amount, moment }) {
+                return `
+                <li class="list-group-item d-flex justify-content-between">
+                        <div class="d-flex flex-column">
+                                ${desc}
+                            <small class="text-muted">${getDateString(
+                    moment
+                )}</small>
+                        </div>
+                        <div>
+                            <span class="px-5">
+                                    ${amount}
+                            </span>
+                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteItem(${moment.valueOf()}, ${amount})">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </li>
+                `;
+            }
 
-        //initialise a variable to 0
-        //let counter = 0;
-        //function to increment the no.
-        //function counterIncrement() {
-        //    //increment counter for every click
-        //    counter++;
-        //    //Show on the chrome console
-        //    console.log(counter);
-        //}
-    </script>
+
+
+
+                            //initialise a variable to 0
+                            //let counter = 0;
+                            //function to increment the no.
+                            //function counterIncrement() {
+                            //    //increment counter for every click
+                            //    counter++;
+                            //    //Show on the chrome console
+                            //    console.log(counter);
+                            //}
+        </script>
 </body>
 </html>
