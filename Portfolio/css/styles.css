@@ -3,10 +3,23 @@ body {
     background-attachment: fixed;
     background-size: cover;
     margin:0;
+    font-family: monospace;
 }
+
+h1 {
+    font-family: monospace;
+}
+
+.social{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 .site-header {
     color: white;
-    height: 100vh;
+    height: 70vh;
     font-family: monospace;
 
     /*Note that flex works only for first child(s) of site-header here*/
@@ -31,4 +44,85 @@ body {
 
 .site-header-content{
     margin:10px;
+    margin-left: 170px;
+    margin-right: 170px;
+}
+
+#more {display: none;}
+
+.fa {
+    /*height: 50px;*/
+  padding: 20px;
+  font-size: 30px;
+  width: 55px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+  border-radius: 50%;
+}
+
+/* Add a hover effect if you want */
+.fa:hover {
+  opacity: 0.7;
+}
+
+/* Set a specific color for each brand */
+
+/* Facebook */
+.fa-linkedin {
+  background: #007bb5;
+  color: white;
+}
+.fa-github {
+  background: #000000;
+  color: white;
+}
+/*.fa-blog {
+  background: #000000;
+  color: white;
+}*/
+
+/* Twitter */
+.fa-twitter {
+  background: #55ACEE;
+  color: white;
+}
+
+.navbar-nav {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+}
+
+.navbar-brand {
+  color: greenyellow !important;
+  font-size: 150% !important;
+}
+.navbar {
+  width: 100%;
+    
+}
+.nav-links{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-link > a{
+  line-height: 3rem;
+  color:grey;
+  padding: 0 .8rem;
+  letter-spacing: 1px;
+  font-size: 22px;
+  font-family: monospace;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: .5s;
+}
+.nav-link:hover > a{
+  transform: scale(1.1);
+  text-decoration: none;
+  color:  #45a049;
 }
